@@ -36,18 +36,21 @@
                         RemoveContainerFromShip();
                         break;
                     case "7":
-                        UnloadContainer();
+                        LoadContainerWithCargo();
                         break;
                     case "8":
-                        ReplaceContainerOnShip();
+                        UnloadContainer();
                         break;
                     case "9":
-                        TransferContainerBetweenShips();
+                        ReplaceContainerOnShip();
                         break;
                     case "10":
-                        PrintContainerInfo();
+                        TransferContainerBetweenShips();
                         break;
                     case "11":
+                        PrintContainerInfo();
+                        break;
+                    case "12":
                         PrintShipInfo();
                         break;
                     case "0":
@@ -100,11 +103,12 @@
             Console.WriteLine("4. Załaduj kontener na statek");
             Console.WriteLine("5. Załaduj listę kontenerów na statek");
             Console.WriteLine("6. Usuń kontener ze statku");
-            Console.WriteLine("7. Rozładuj kontener");
-            Console.WriteLine("8. Zastąp kontener na statku");
-            Console.WriteLine("9. Przenieś kontener między statkami");
-            Console.WriteLine("10. Wypisz informacje o kontenerze");
-            Console.WriteLine("11. Wypisz informacje o statku i jego ładunku");
+            Console.WriteLine("7. Załaduj ładunek do kontenera");
+            Console.WriteLine("8. Rozładuj kontener");
+            Console.WriteLine("9. Zastąp kontener na statku");
+            Console.WriteLine("10. Przenieś kontener między statkami");
+            Console.WriteLine("11. Wypisz informacje o kontenerze");
+            Console.WriteLine("12. Wypisz informacje o statku i jego ładunku");
             Console.WriteLine("0. Wyjście");
             Console.WriteLine();
         }
@@ -304,8 +308,50 @@ static void
             }
             Console.ReadKey();
         }
+        
+        // 7. Załaduj kontener z ładunkiem
+        static void LoadContainerWithCargo()
+        {
+            try
+            {
+                Console.Write("Podaj numer kontenera (indeks, zaczynając od 1): ");
+                int containerIndex = int.Parse(Console.ReadLine());
+                if (containerIndex < 1 || containerIndex > containers.Count)
+                {
+                    Console.WriteLine("Nieprawidłowy numer kontenera.");
+                }
+                else
+                {
+                    Console.Write("Podaj wagę ładunku (kg): ");
+                    double loadWeight = double.Parse(Console.ReadLine());
+                    if (containers[containerIndex - 1] is RefrigeratedContainer)
+                    {
+                        Console.Write("Podaj typ produktu (np. Cheese, Meat, IceCream itp.): ");
+                        string productStr = Console.ReadLine();
+                        if (!Enum.TryParse<ProductType>(productStr, out ProductType product))
+                        {
+                            Console.WriteLine("Nieprawidłowy typ produktu.");
+                            Console.ReadKey();
+                            return;
+                        }
+                        RefrigeratedContainer container = (RefrigeratedContainer)containers[containerIndex - 1];
+                        container.LoadContainer(loadWeight, product);
+                    }
+                    else
+                    {
+                        containers[containerIndex - 1].LoadContainer(loadWeight);
+                    }
+                    Console.WriteLine("Kontener załadowany.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd: " + ex.Message);
+            }
+            Console.ReadKey();
+        }
 
-        // 7. Rozładuj kontener
+        // 8. Rozładuj kontener
         static void UnloadContainer()
         {
             try
@@ -329,7 +375,7 @@ static void
             Console.ReadKey();
         }
 
-        // 8. Zastąp kontener na statku
+        // 9. Zastąp kontener na statku
         static void ReplaceContainerOnShip()
         {
             try
@@ -380,7 +426,7 @@ static void
             Console.ReadKey();
         }
 
-        // 9. Przenieś kontener między statkami
+        // 10. Przenieś kontener między statkami
         static void TransferContainerBetweenShips()
         {
             try
@@ -411,7 +457,7 @@ static void
             Console.ReadKey();
         }
 
-        // 10. Wypisz informacje o kontenerze
+        // 11. Wypisz informacje o kontenerze
         static void PrintContainerInfo()
         {
             try
@@ -434,7 +480,7 @@ static void
             Console.ReadKey();
         }
 
-        // 11. Wypisz informacje o statku i jego ładunku
+        // 12. Wypisz informacje o statku i jego ładunku
         static void PrintShipInfo()
         {
             try

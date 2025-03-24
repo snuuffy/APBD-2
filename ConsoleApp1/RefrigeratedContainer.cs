@@ -13,6 +13,11 @@ public class RefrigeratedContainer : Container
     {
         this.currentTemperature = currentTemperature;
         this.storedProduct = storedProduct;
+        double requiredTemperature = ProductTemperatureRequirements.RequiredTemperature[storedProduct.Value];
+        if (currentTemperature > requiredTemperature)
+        {
+            throw new TemperatureException($"Temperatura {currentTemperature}°C jest zbyt wysoka...");
+        }
     }
     
     public override void LoadContainer(double loadWeight)
@@ -57,4 +62,8 @@ public class RefrigeratedContainer : Container
         base.LoadContainer(loadWeight);
     }
 
+    public override string ToString()
+    {
+        return $"Kontener {serialNumber} typu {containerType}: Ładunek = {loadWeight} kg, Maksymalna ładowność = {maxLoad} kg, Temperatura = {currentTemperature}°C, Produkt = {storedProduct}";
+    }
 }
